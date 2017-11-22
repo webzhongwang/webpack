@@ -1,0 +1,13 @@
+.subnav{
+	display: none;
+}
+.topnav li:hover .subnav{
+	display: block;
+	visibility: inherit;
+}
+li.usr-info:hover div.usr-info{
+	height: 260px !important;
+}
+#toolbar{
+	display: none;
+}

@@ -1,0 +1,19 @@
+node_modules/
+log/
+tmp/
+.cache/
+npm-debug.log
+
+.idea
+.history
+.DS_Store
+static/js/tpl/**/*.js
+*.swp
+static/css/**/*.css
+bower_components
+.cache/
+
+######## OS generated files ########
+.DS_Store
+.DS_Store?
+.vscode
