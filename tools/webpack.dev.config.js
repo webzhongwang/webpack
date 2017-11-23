@@ -56,7 +56,7 @@ config.module = {
             test: require.resolve('zepto'),
             loader: 'exports-loader?window.Zepto!script-loader'
         },
-        // 开发环境中的file-loader
+        // 开发环境中的file-loader,与生产环境中配置不一样
         {
             test: /\.(png|jpg|gif)$/,
             use: [

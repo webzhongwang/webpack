@@ -37,6 +37,7 @@ config.module = {
                 {
                     loader: 'file-loader',
                     options: {
+                    	// publicPath:'/',
                         // 输出图片的地址
                         outputPath: '/img/',
                         // 使用原图片名
@@ -46,7 +47,9 @@ config.module = {
                     }  
                 }
             ]
-        }
+        },
+
+        
 		
 	]
 }
@@ -75,10 +78,14 @@ config.plugins = [
 			warnings: false
 		}
 	}),
-	// 考贝图片
-	// new CopyWebpackPlugin({
 
-	// }),
+	// 考贝文件
+    new CopyWebpackPlugin([{
+    	from: 'src/txt/*',
+    	to: 'txt',
+    	// 只考贝文件，忽略路径
+    	flatten: true
+    }]),
 
     // 生成html
     // new HtmlWebpackPlugin()
@@ -97,7 +104,7 @@ config.plugins = [
 		},
 		// 只引入app.js
 		// chunks: ['app'],
-	})
+	}),
 
 ]
 module.exports = config;

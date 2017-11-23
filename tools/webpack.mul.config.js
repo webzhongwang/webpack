@@ -33,7 +33,25 @@ config.module = {
                     minimize: true //css压缩
                 }
 			})
-		}
+		},
+		// 生产环境中的file-loader
+		{
+            test: /\.(png|jpg|gif)$/,
+            use: [
+                {
+                    loader: 'file-loader',
+                    options: {
+                    	// publicPath:'/',
+                        // 输出图片的地址
+                        outputPath: '/img/',
+                        // 使用原图片名
+                        name: '[name].[ext]',
+                        // 保持原有的图片目录结构
+                        useRelativePath: true,
+                    }  
+                }
+            ]
+        }
 		
 	]
 };
