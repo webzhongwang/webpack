@@ -51,6 +51,7 @@ config.module = {
                 loader: 'css-loader'
             })
         },
+        
         // zepto
         {
             test: require.resolve('zepto'),

@@ -2,9 +2,13 @@ const webpack = require('webpack');
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 let config = require('./webpack.base.config.js');
+
+// let cssExtractTextPlugin = new ExtractTextPlugin('css/style.css');
+// let lessExtractTextPlugin = new ExtractTextPlugin('css/le.css');
 
 config.module = {
 	rules:[
@@ -19,17 +23,28 @@ config.module = {
 				
 			}
         },
-		{
-			test: /\.css$/,
-			// use: 'css-loader'
-			use: ExtractTextPlugin.extract({
-				// fallback: "style-loader",
-				loader: 'css-loader',
-				options:{
-                    minimize: true //css压缩
-                }
-			})
-		},
+
+        // // 只有CSS时 ，可以直接使用minimize属性压缩css
+        // {
+        //     test: /\.(css|less)$/,
+        //     use: lessExtractTextPlugin.extract({
+        //         loader: 'css-loader!less-loader',
+        //         options:{
+        //             minimize: true //css压缩
+        //         }
+        //     })
+        // },
+
+        // 当有预编译时，不能直接压缩，需要用到插件 optimize-css-assets-webpack-plugin
+        {
+            test: /\.(css|less)$/,
+            use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                // loader: 'css-loader!less-loader',
+                use: ['css-loader', 'less-loader'],
+                
+            })
+        },
 		// 生产环境中的file-loader
 		{
             test: /\.(png|jpg|gif)$/,
@@ -47,10 +62,7 @@ config.module = {
                     }  
                 }
             ]
-        },
-
-        
-		
+        },	
 	]
 }
 config.plugins = [
@@ -66,8 +78,20 @@ config.plugins = [
         }
     ),
 
-	// 生成css
-    new ExtractTextPlugin('css/style[hash].css'),
+    // css
+    new ExtractTextPlugin('css/style.css'),
+
+    // 当有预编译(less/sass等)时，不能直接压缩，需要用到插件 optimize-css-assets-webpack-plugin
+    new OptimizeCssAssetsPlugin({
+        assetNameRegExp: /\.css$/g,
+        cssProcessorOptions: { 
+            discardComments: {
+                removeAll: true 
+            } 
+        },
+        canPrint: true
+    }),
+
     // 生成公用库
     new webpack.optimize.CommonsChunkPlugin({
         name: 'vendor' // 指定公共 bundle 的名字。

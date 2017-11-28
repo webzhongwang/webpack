@@ -1,5 +1,6 @@
 let $ = require('jquery');
 require('../css/a.css');
+require('../css/aa.less');
 require('../css/login.css');
 var login = function(){
     var that = this;
