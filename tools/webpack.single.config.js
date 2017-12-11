@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 let config = require('./webpack.base.config.js');
@@ -24,27 +23,29 @@ config.module = {
 			}
         },
 
-        // // 只有CSS时 ，可以直接使用minimize属性压缩css
-        // {
-        //     test: /\.(css|less)$/,
-        //     use: lessExtractTextPlugin.extract({
-        //         loader: 'css-loader!less-loader',
-        //         options:{
-        //             minimize: true //css压缩
-        //         }
-        //     })
-        // },
-
-        // 当有预编译时，不能直接压缩，需要用到插件 optimize-css-assets-webpack-plugin
+        // CSS 
         {
             test: /\.(css|less)$/,
             use: ExtractTextPlugin.extract({
                 fallback: 'style-loader',
-                // loader: 'css-loader!less-loader',
-                use: ['css-loader', 'less-loader'],
-                
+                use: [
+                    {
+                        loader: 'css-loader',
+                        options:{
+                            minimize: true //css压缩
+                        }
+                    },
+                    {
+                        loader: 'less-loader',
+                    },
+                    {
+                        loader: 'autoprefixer-loader?browsers=last 55 versions'
+                    }
+                ]
+                        
             })
         },
+
 		// 生产环境中的file-loader
 		{
             test: /\.(png|jpg|gif)$/,
@@ -80,17 +81,6 @@ config.plugins = [
 
     // css
     new ExtractTextPlugin('css/style.css'),
-
-    // 当有预编译(less/sass等)时，不能直接压缩，需要用到插件 optimize-css-assets-webpack-plugin
-    new OptimizeCssAssetsPlugin({
-        assetNameRegExp: /\.css$/g,
-        cssProcessorOptions: { 
-            discardComments: {
-                removeAll: true 
-            } 
-        },
-        canPrint: true
-    }),
 
     // 生成公用库
     new webpack.optimize.CommonsChunkPlugin({

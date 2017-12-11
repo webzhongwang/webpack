@@ -7,4 +7,8 @@
 	height: 400px;
 	margin:100px auto;
 	background: #ccc;
+	box-sizing: border-box;
+	border-radius: 5px;
+	display: flex;
+	transition: all .3;
 }
